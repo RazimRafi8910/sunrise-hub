@@ -1,0 +1,14 @@
+{
+  "name": "@sunrise-hub/shared",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "razim rafi",
+  "type": "commonjs",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {}
+}
