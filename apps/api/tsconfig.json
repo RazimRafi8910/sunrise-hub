@@ -1,46 +1,27 @@
 {
-  // Visit https://aka.ms/tsconfig to read more about this file
   "compilerOptions": {
-    // File Layout
-    "rootDir": "./src",
-    "outDir": "./dist",
+    /* Target & Environment */
+    "target": "es2022",                  // Baseline for modern LTS Node.js
+    "module": "nodenext",                // Enforces native Node.js ESM or CJS
+    "moduleResolution": "nodenext",      // Matches native Node.js resolution rules
+    "lib": ["es2022"],                   // Keeps backend clean of DOM types
 
-    // Environment Settings
-    // See also https://aka.ms/tsconfig/module
-    "module": "nodenext",
-    "target": "esnext",
-    "types": [],
-    // For nodejs:
-    // "lib": ["esnext"],
-    // "types": ["node"],
-    // and npm install -D @types/node
+    /* Build Output */
+    "rootDir": "./src",                  // Source file location
+    "outDir": "./dist",                  // Where production .js files are created
+    "sourceMap": true,                   // Essential for production error stack traces
+    "declaration": true,                 // Useful for microservices or monorepos
 
-    // Other Outputs
-    "sourceMap": true,
-    "declaration": true,
-    "declarationMap": true,
+    /* Strictness & Safety */
+    "strict": true,                      // Industry default requirement
+    "noUncheckedIndexedAccess": true,    // Highly recommended for safe Request parsing
+    "skipLibCheck": true,                // Prevents third-party node_modules type errors
 
-    // Stricter Typechecking Options
-    "noUncheckedIndexedAccess": true,
-    "exactOptionalPropertyTypes": true,
-
-    // Style Options
-    // "noImplicitReturns": true,
-    // "noImplicitOverride": true,
-    // "noUnusedLocals": true,
-    // "noUnusedParameters": true,
-    // "noFallthroughCasesInSwitch": true,
-    // "noPropertyAccessFromIndexSignature": true,
-
-    // Recommended Options
-    "strict": true,
-    "jsx": "react-jsx",
-    "verbatimModuleSyntax": true,
-    "isolatedModules": true,
-    "noUncheckedSideEffectImports": true,
-    "moduleDetection": "force",
-    "skipLibCheck": true,
+    /* Modern Interop Rules */
+    "esModuleInterop": true,             // Ensures smooth imports from legacy Express CJS middleware
+    "forceConsistentCasingInFileNames": true, // Prevents cross-OS build crashes
+    "verbatimModuleSyntax": true         // Forces explicit 'import type' for cleaner bundles
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules","dist","test"]
+  "exclude": ["node_modules", "dist"]
 }
