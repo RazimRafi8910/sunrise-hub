@@ -1,0 +1,13 @@
+user ─┬─ profiles (1:1)
+      ├─ user_roles ─ roles ─ role_permissions ─ permissions
+      ├─ wallets (1:1) ─ wallet_entries ◄─ payments (top-ups)
+      ├─ orders ─ order_items ─ items ─ vendors ─ vendor_staff ─ user
+      └─ reports ─ report_images, rules
+
+
+Design rules
+Money is bigint in paise. Never floats.
+The wallet is a ledger. wallet_entries is append-only, and wallets.balance_paise is a cached total updated in the same transaction.
+Orders snapshot prices. A later price change must not rewrite old orders.
+Statuses are text with a CHECK, not native enums. They are easier to change later and map directly to the constants in @sunrise-hub/shared.
+Auth tables belong to the auth library. Better Auth creates user, session, account and verification itself. Our tables reference its user id. Check its generated schema before writing the foreign keys below (I assume "user"(id) as text).

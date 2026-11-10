@@ -12,10 +12,13 @@
   "dependencies": {
     "@sunrise-hub/shared": "1.0.0",
     "@tailwindcss/vite": "^4.3.3",
+    "@tanstack/react-query": "^5.107.1",
+    "better-auth": "^1.7.14",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "react-router": "^8.5.0",
-    "tailwindcss": "^4.3.3"
+    "tailwindcss": "^4.3.3",
+    "zustand": "^5.0.16"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

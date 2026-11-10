@@ -1,5 +1,4 @@
 import { Icon } from '../../components/Icon'
-import { useUser } from '../../context/UserContext'
 import { CampusCard } from './CampusCard'
 import { RecentActivity } from './RecentActivity'
 import { ServicesGrid } from './ServicesGrid'
@@ -11,7 +10,6 @@ function greetingLabel(hour: number) {
 }
 
 export function HomePage() {
-  const user = useUser()
   const greeting = greetingLabel(new Date().getHours())
 
   return (
@@ -22,7 +20,7 @@ export function HomePage() {
         </div>
         <div className="flex min-w-0 flex-1 flex-col gap-0.5">
           <h1 className="text-[17px] font-extrabold tracking-[-0.01em]">
-            {greeting}, {user.firstName}
+            {greeting}, {"peter"}
           </h1>
           <p className="text-[13px] text-muted">Welcome to Sunrise Hub</p>
         </div>

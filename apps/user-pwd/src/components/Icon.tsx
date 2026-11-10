@@ -21,6 +21,8 @@ export type IconName =
   | 'building2'
   | 'shieldCheck'
   | 'logOut'
+  | 'lock'
+  | 'chevronDown'
 
 const glyphs: Record<IconName, ReactNode> = {
   sunrise: (
@@ -136,6 +138,13 @@ const glyphs: Record<IconName, ReactNode> = {
       <path d="M16 8l4 4-4 4M20 12H9" />
     </>
   ),
+  lock: (
+    <>
+      <rect x="5" y="11" width="14" height="10" rx="2" />
+      <path d="M8 11V7a4 4 0 0 1 8 0v4" />
+    </>
+  ),
+  chevronDown: <path d="M6 9l6 6 6-6" />,
 }
 
 type IconProps = {

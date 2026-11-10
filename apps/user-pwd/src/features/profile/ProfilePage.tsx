@@ -1,13 +1,9 @@
 import { Icon } from '../../components/Icon'
 import { RoleChip } from '../../components/RoleChip'
-import { useUser } from '../../context/UserContext'
-import { getRoleCopy } from '../../mocks/user'
 import { InfoCard } from './InfoCard'
 import { InfoRow } from './InfoRow'
 
 export function ProfilePage() {
-  const user = useUser()
-  const copy = getRoleCopy(user.role)
 
   return (
     <div className="flex flex-col gap-4">
@@ -72,7 +68,7 @@ export function ProfilePage() {
       <button
         type="button"
         className="flex h-[52px] items-center justify-center gap-2 rounded-button border-0 bg-surface text-[15px] font-extrabold text-danger"
-        onClick={() => {}}
+        onClick={logout}
       >
         <Icon name="logOut" size={20} strokeWidth={1.9} />
         Sign out

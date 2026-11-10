@@ -1,30 +1,24 @@
 import { useState } from 'react'
 import { Icon } from '../../components/Icon'
 import { RoleChip } from '../../components/RoleChip'
-import { useUser } from '../../context/UserContext'
-import { getRoleCopy } from '../../mocks/user'
 
 export function CampusCard() {
-  const user = useUser()
-  const copy = getRoleCopy(user.role)
+  const copy = "student"
   const [hidden, setHidden] = useState(true)
-  const formatted = user.walletBalance.toLocaleString('en-IN', {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  })
+  const formatted = 0.0
   const balanceText = hidden ? '₹ ••••••' : `₹${formatted}`
 
   return (
     <section className="flex flex-col gap-4 rounded-card bg-amber p-5">
       <div className="flex items-center justify-between">
         <p className="text-[12px] font-extrabold tracking-[0.1em]">[COLLEGE NAME]</p>
-        <RoleChip role={user.role} />
+        <RoleChip role={"student"} />
       </div>
 
       <div className="flex flex-col gap-[3px]">
-        <h2 className="text-[21px] font-extrabold tracking-[-0.01em]">{user.fullName}</h2>
-        <p className="text-[13px] font-semibold text-amber-ink">{copy.idLine}</p>
-        <p className="text-[13px] font-bold tracking-[0.04em]">ID {user.campusId}</p>
+        <h2 className="text-[21px] font-extrabold tracking-[-0.01em]">{"peter"}</h2>
+        <p className="text-[13px] font-semibold text-amber-ink">{23}</p>
+        <p className="text-[13px] font-bold tracking-[0.04em]">ID {253453}</p>
       </div>
 
       <p className="-mb-2.5 text-[13px] font-bold text-amber-ink">Wallet balance</p>

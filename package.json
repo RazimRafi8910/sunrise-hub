@@ -1,4 +1,4 @@
-  {
+{
     "name": "sunrise-hub",
     "version": "1.0.0",
     "description": "",
@@ -7,14 +7,24 @@
     "type": "commonjs",
     "main": "index.js",
     "scripts": {
-      "test": "echo \"Error: no test specified\" && exit 1",
-      "dev:api":"npm run dev -w @sunrise-hub/api"
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "dev:api": "npm run dev -w @sunrise-hub/api",
+        "dev:ui": "npm run dev -w @sunrise-hub/user-pwd",
+        "dev:all": "npm run dev:api && npm run dev:ui",
+        "build:api": "npm run build -w @sunrise-hub/api",
+        "build:ui": "npm run build -w @sunrise-hub/user-pwd",
+        "build:all": "npm run build:api && npm run build:ui",
+        "start:api": " npm run build -w @sunrise-hub/api && node dist/main.js"
     },
     "workspaces": [
-      "apps/api",
-      "packages/shared"
+        "apps/api",
+        "packages/shared",
+        "apps/user-pwd"
     ],
     "devDependencies": {
-      "typescript": "^7.0.2"
+        "typescript": "^7.0.2"
+    },
+    "dependencies": {
+        "@esbuild/win32-x64": "^0.28.2"
     }
-  }
+}

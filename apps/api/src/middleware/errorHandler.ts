@@ -1,14 +1,29 @@
-import type { NextFunction , Request, Response } from 'express';
+import type { NextFunction, Request, Response } from 'express';
+import { ERROR_CODES } from '@sunrise-hub/shared';
+import ApiError from '../lib/apiError.js';
 
 function handleError(err: Error, req: Request, res: Response, next: NextFunction) {
-  if (err) {
-
+  console.error(`error on ${req.baseUrl} message: ${err.message}`)
+  if (err instanceof ApiError) {
+    console.log(err)
+    const response = {
+      success: false,
+      error: {
+        message: err.message,
+        code: err.code,
+        details: err.details ?? []
+      }
+    }
+    return res.status(err.status).json(response);
   }
-
-  return res.status(500).json({ message: "Internal server error" });
+  console.error(err);
+  return res.status(501).json({ success: false, error: { message: "internal server error", code: ERROR_CODES.INTERNAL_ERROR } });
 }
 
 
 function handleNotFound(req: Request, res: Response, next: NextFunction) {
-  return res.status(404).json({ message: "url not found" });
+  console.log(`request: ${req.baseUrl} from: ${req.ip}`)
+  return res.status(404).json({message:"url not found",code:"",url:req.originalUrl})
 }
+
+export { handleNotFound, handleError };

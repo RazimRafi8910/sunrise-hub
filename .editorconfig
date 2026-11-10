@@ -1,0 +1,6 @@
+
+[*.ts,*.js]
+tab_width = 4
+
+[*.tsx,*jsx]
+tab_width = 2

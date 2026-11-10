@@ -1,6 +1,5 @@
 import { Icon, type IconName } from '../../components/Icon'
 import { IconBox } from '../../components/IconBox'
-import { useUser } from '../../context/UserContext'
 import { getRoleCopy } from '../../mocks/user'
 
 function ServiceTile({
@@ -39,8 +38,7 @@ function ServiceTile({
 }
 
 export function ServicesGrid() {
-  const user = useUser()
-  const copy = getRoleCopy(user.role)
+  const copy = "student"
 
   return (
     <section className="flex flex-col gap-3">
@@ -48,7 +46,7 @@ export function ServicesGrid() {
       <div className="grid grid-cols-2 gap-3">
         <ServiceTile name="Canteen" subtitle="Order and pay" icon="utensils" />
         <ServiceTile name="Store" subtitle="Stationery" icon="pencil" />
-        <ServiceTile name={copy.reportName} subtitle={copy.reportSub} icon="shieldAlert" />
+        <ServiceTile name={"report"} subtitle={"report violation"} icon="shieldAlert" />
         <ServiceTile name="Events" subtitle="What is coming up" icon="calendarDays" soon />
       </div>
     </section>
