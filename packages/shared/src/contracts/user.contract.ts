@@ -3,17 +3,18 @@ import type { UserRolesEnum } from "../types/roles.js";
 
 
 export interface User {
-    id: string;
-    fullname: string;
-    email: string;
-    emailVerified: string;
-    createdAt: string;
-    collegeId: string;
-    isActive: boolean;
-    role: UserRolesEnum;
-    department: DepartmentsEnum;
-    classYear: string;
-    course: CourseEnum;
+  id: string;
+  fullname: string;
+  name?: string;
+  email: string;
+  emailVerified: string;
+  createdAt: string;
+  collegeId: string;
+  isActive: boolean;
+  role: UserRolesEnum;
+  department: DepartmentsEnum;
+  classYear: string;
+  course: CourseEnum;
 }
 
 

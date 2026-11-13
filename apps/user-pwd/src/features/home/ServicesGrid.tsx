@@ -1,6 +1,5 @@
 import { Icon, type IconName } from '../../components/Icon'
 import { IconBox } from '../../components/IconBox'
-import { getRoleCopy } from '../../mocks/user'
 
 function ServiceTile({
   name,

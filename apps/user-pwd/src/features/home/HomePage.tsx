@@ -1,4 +1,6 @@
+import { useEffect } from 'react'
 import { Icon } from '../../components/Icon'
+import { useAuthUser } from '../../hooks/useAuth'
 import { CampusCard } from './CampusCard'
 import { RecentActivity } from './RecentActivity'
 import { ServicesGrid } from './ServicesGrid'
@@ -11,7 +13,13 @@ function greetingLabel(hour: number) {
 
 export function HomePage() {
   const greeting = greetingLabel(new Date().getHours())
-
+  const { user,session } = useAuthUser();
+  console.log(session.id)
+  console.log(session.expiresAt)
+  useEffect(() => {
+    console.log("HomePage mounted");
+    return () => console.log("HomePage unmounted");
+  }, []);
   return (
     <div className="flex flex-col gap-[22px]">
       <header className="flex items-center gap-3">
@@ -20,7 +28,7 @@ export function HomePage() {
         </div>
         <div className="flex min-w-0 flex-1 flex-col gap-0.5">
           <h1 className="text-[17px] font-extrabold tracking-[-0.01em]">
-            {greeting}, {"peter"}
+            {greeting}, {user.fullname}
           </h1>
           <p className="text-[13px] text-muted">Welcome to Sunrise Hub</p>
         </div>

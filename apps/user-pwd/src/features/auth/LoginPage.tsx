@@ -1,59 +1,40 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router'
 import { AuthLayout } from '../../components/AuthLayout'
 import { PasswordField } from '../../components/PasswordField'
 import { PrimaryButton } from '../../components/PrimaryButton'
 import { TextField } from '../../components/TextField'
-import { useLogin } from '../../hooks/useAuth'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { loginZodSchema } from '@sunrise-hub/shared';
+import authClient, { getAuthErrorCodeMsg } from '../../lib/auth-client'
 
 export function LoginPage() {
   const navigate = useNavigate()
-  const login = useLogin();
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [errors, setErrors] = useState<{ email?: string; password?: string; general?: string }>({})
+  const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
   const [showForgotNotice, setShowForgotNotice] = useState(false)
+  const { handleSubmit, register, formState: { errors } } = useForm({
+    resolver:zodResolver(loginZodSchema),
+  });
 
-  const validate = () => {
-    const nextErrors: { email?: string; password?: string } = {}
-
-    if (!email.trim()) {
-      nextErrors.email = 'Email is required'
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
-      nextErrors.email = 'Please enter a valid email address'
-    }
-
-    if (!password) {
-      nextErrors.password = 'Password is required'
-    }
-
-    setErrors(nextErrors)
-    return Object.keys(nextErrors).length === 0
-  }
-
-  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    if (!validate()) return
-    login.mutate(
-      { email, password },
-      { onSuccess:()=> {
-        navigate('/', {
-          replace: true
-        })
-      },}
-    )
+  async function onSubmit(data:{email:string,password:string}) {
     setLoading(true)
-    setErrors({})
-
     try {
-
-      navigate('/')
-    } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Login failed. Please try again.'
-      setErrors({ general: message })
+      const result = await authClient.signIn.email({ email: data.email, password: data.password });
+      if (result.error) {
+        setError(getAuthErrorCodeMsg(result.error.code));
+        return
+      }
+      console.log(result.data)
+      if (result.data.user) {
+        navigate('/', { replace: true });
+      }
+    } catch (error) {
+      console.log(error)
+      setError("Something went wrong");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   }
 
@@ -65,13 +46,13 @@ export function LoginPage() {
       bottomLinkText="Sign up"
       bottomLinkTo="/signup"
     >
-      <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4">
-        {errors.general && (
+      <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-4">
+        {error && (
           <div
             role="alert"
-            className="rounded-[16px] bg-bg p-3 text-[13px] font-semibold text-danger"
+            className="rounded-[16px] px-3 text-[13px] font-semibold text-danger"
           >
-            {errors.general}
+            {error}
           </div>
         )}
 
@@ -80,29 +61,23 @@ export function LoginPage() {
           label="College email"
           icon="mail"
           type="email"
+          name="email"
           inputMode="email"
           autoComplete="email"
           placeholder="you@college.edu"
-          value={email}
-          error={errors.email}
-          onChange={(e) => {
-            setEmail(e.target.value)
-            if (errors.email) setErrors((prev) => ({ ...prev, email: undefined }))
-          }}
+          register={register}
+          error={errors.email?.message}
         />
 
         <div className="flex flex-col gap-1.5">
           <PasswordField
+            name="password"
             id="login-password"
             label="Password"
             autoComplete="current-password"
             placeholder="Enter your password"
-            value={password}
-            error={errors.password}
-            onChange={(e) => {
-              setPassword(e.target.value)
-              if (errors.password) setErrors((prev) => ({ ...prev, password: undefined }))
-            }}
+            register={register}
+            error={errors.password?.message}
           />
 
           <div className="flex justify-end">
@@ -125,7 +100,7 @@ export function LoginPage() {
           </div>
         )}
 
-        <PrimaryButton loading={login.isPending}>Sign in</PrimaryButton>
+        <PrimaryButton type='submit' loading={loading}>Sign in</PrimaryButton>
       </form>
     </AuthLayout>
   )

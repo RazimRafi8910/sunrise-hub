@@ -4,18 +4,25 @@ import { Icon, type IconName } from './Icon'
 export type TextFieldProps = {
   id: string
   label: string
+  name?: string
   icon?: IconName
   error?: string
+  register?: any
 } & ComponentPropsWithoutRef<'input'>
 
 export function TextField({
   id,
   label,
+  name,
   icon,
   error,
   className = '',
+  register,
   ...rest
 }: TextFieldProps) {
+  if (typeof register !== 'function') {
+    register = (n) => (n)
+  }
   return (
     <div className="flex flex-col gap-[6px]">
       <label htmlFor={id} className="text-[12px] font-semibold text-muted">
@@ -29,15 +36,14 @@ export function TextField({
         )}
         <input
           id={id}
+          {...register(name)}
           aria-invalid={Boolean(error)}
           aria-describedby={error ? `${id}-error` : undefined}
-          className={`h-[52px] w-full rounded-[16px] border-0 bg-bg text-[15px] font-semibold text-ink placeholder:font-normal placeholder:text-muted transition-colors ${
-            icon ? 'pl-12' : 'pl-4'
-          } pr-4 ${
-            error
+          className={`h-[52px] w-full rounded-[16px] border-0 bg-bg text-[15px] font-semibold text-ink placeholder:font-normal placeholder:text-muted transition-colors ${icon ? 'pl-12' : 'pl-4'
+            } pr-4 ${error
               ? 'outline-2 outline-danger outline-offset-2'
               : 'focus:outline-2 focus:outline-ink focus:outline-offset-2'
-          } ${className}`}
+            } ${className}`}
           {...rest}
         />
       </div>

@@ -1,4 +1,4 @@
-import { getBackendURL } from "./backendUrl"
+import { getBackendURL } from "./utils"
 
 const backendUrl = getBackendURL()
 
@@ -29,4 +29,9 @@ export class ApiError extends Error {
     super(message);
     this.status = status;
   }
+}
+
+
+export const BetterAuthErrorCode = {
+  USER_ALREADY_EXISTS:"User already exists with same email, please login",
 }

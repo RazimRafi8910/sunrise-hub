@@ -1,7 +1,19 @@
 // hooks/useAuth.ts
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { api, ApiError } from "../lib/api";
-import type { Session } from "@sunrise-hub/shared";
+import type { Session, SessionInfo } from "@sunrise-hub/shared";
+import authClient from "../lib/auth-client";
+import type {User} from '@sunrise-hub/shared'
+
+
+export function useAuthUser(): { user: User, session: SessionInfo, isPending:boolean } {
+  const { data: { user, session }, error, isPending, refetch } = authClient.useSession();
+  if (!user) {
+      throw new Error("useAuthUser must be used inside a protected route");
+  }
+
+  return { user, session, error, isPending, refetch }
+}
 
 //type Session = { user: { id: string; name: string; email: string }; session: { id: string } };
 const SESSION_KEY = ["session"];
@@ -11,7 +23,7 @@ export function useSession() {
     queryKey: SESSION_KEY,
     queryFn: async () => {
       try {
-        return await api<Session>("/me");
+        return  authClient.useSession()
       } catch (e) {
         if (e instanceof ApiError && e.status === 401) return null; // logged out is a valid state, not an error
         throw e;

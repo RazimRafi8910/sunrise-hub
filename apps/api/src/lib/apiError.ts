@@ -3,9 +3,9 @@ import {ERROR_CODES, ERROR_STATUS, type ErrorCode } from '@sunrise-hub/shared';
 class ApiError extends Error {
   public readonly status: number;
   public readonly code: ErrorCode;
-  readonly details: string | string[] = [];
+  readonly details: any[];
 
-  constructor(code: ErrorCode, message?: string, details:string | string[] = []) {
+  constructor(code: ErrorCode, message?: string, details:any[] = []) {
     super(message ?? code);
     this.code = code;
     this.name = "Api Error"

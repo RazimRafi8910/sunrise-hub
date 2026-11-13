@@ -1,99 +1,38 @@
-import { useState, type FormEvent } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router'
 import { AuthLayout } from '../../components/AuthLayout'
 import { PasswordField } from '../../components/PasswordField'
 import { PrimaryButton } from '../../components/PrimaryButton'
 import { SelectField } from '../../components/SelectField'
 import { TextField } from '../../components/TextField'
-import auth from '../../lib/auth-client';
-import type { User } from '@sunrise-hub/shared'
-
-const YEAR_OPTIONS = [
-  '1st Year',
-  '2nd Year',
-  '3rd Year',
-]
-
-const COURSE_OPTIONS = [
-  'BBA',
-  'BCA',
-  'BCOM',
-]
+import auth, { getAuthErrorCodeMsg } from '../../lib/auth-client';
+import { useForm } from 'react-hook-form';
+import { ClassLYears, Course, signupZodSchema } from '@sunrise-hub/shared'
+import { zodResolver } from '@hookform/resolvers/zod';
 
 export function SignupPage() {
   const navigate = useNavigate()
-
-  const [fullName, setFullName] = useState('')
-  const [campusId, setCampusId] = useState('')
-  const [classYear, setClassYear] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-
-  const [errors, setErrors] = useState<{
-    fullName?: string
-    campusId?: string
-    classYear?: string
-    email?: string
-    password?: string
-    general?: string
-  }>({})
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState("");
+  const { register, handleSubmit, formState: { errors } } = useForm({ resolver: zodResolver(signupZodSchema) });
 
-  const validate = () => {
-    const nextErrors: typeof errors = {}
-
-    if (!fullName.trim()) {
-      nextErrors.fullName = 'Full name is required'
-    }
-
-    if (!campusId.trim()) {
-      nextErrors.campusId = 'College ID is required'
-    }
-
-    if (!classYear) {
-      nextErrors.classYear = 'Please select your academic year'
-    }
-
-    if (!email.trim()) {
-      nextErrors.email = 'Email is required'
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
-      nextErrors.email = 'Please enter a valid email address'
-    }
-
-    if (!password) {
-      nextErrors.password = 'Password is required'
-    } else if (password.length < 6) {
-      nextErrors.password = 'Password must be at least 6 characters'
-    }
-
-    setErrors(nextErrors)
-    return Object.keys(nextErrors).length === 0
-  }
-
-    const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault()
-    if (!validate()) return
-
+  async function onSubmit(data) {
     setLoading(true)
-    setErrors({})
+    try {
+      const { data:response,error } = await auth.signUp.email({name:data.fullname,...data});
+      console.log(data)
 
-      try {
-        const result = await auth.signUp.email({
-          name: fullName,
-          email: email,
-          college_id_no: campusId,
-          class_year: classYear,
-          department: "computer_application",
-          course:"BBA",
-          password: password,
-          callbackURL: '/'
-        });
-        console.log(result)
-      navigate('/')
-      } catch (err: unknown) {
-        console.log(err)
-      const message = err instanceof Error ? err.message : 'Sign up failed. Please try again.'
-      setErrors({ general: message })
+      if (error) {
+        console.log(error)
+        setError(getAuthErrorCodeMsg(error.code));
+      }
+
+      if (response) {
+        navigate('/', { replace: true });
+      }
+    } catch (error) {
+      console.log(error)
+      setError(error)
     } finally {
       setLoading(false)
     }
@@ -107,104 +46,86 @@ export function SignupPage() {
       bottomLinkText="Sign in"
       bottomLinkTo="/login"
     >
-      <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4">
-        {errors.general && (
+      <form onSubmit={handleSubmit(onSubmit)} noValidate className="flex flex-col gap-4">
+        {error && (
           <div
             role="alert"
             className="rounded-[16px] bg-bg p-3 text-[13px] font-semibold text-danger"
           >
-            {errors.general}
+            {error}
           </div>
         )}
 
         <TextField
           id="signup-fullname"
+          name='fullname'
           label="Full name"
           icon="user"
           type="text"
           autoComplete="name"
           placeholder="e.g. Ayaan Rahman"
-          value={fullName}
-          error={errors.fullName}
-          onChange={(e) => {
-            setFullName(e.target.value)
-            if (errors.fullName) setErrors((prev) => ({ ...prev, fullName: undefined }))
-          }}
+          register={register}
+          error={errors.fullname?.message}
         />
 
         <TextField
           id="signup-campusid"
           label="College ID"
+          name="collegeId"
           icon="idCard"
+          register={register}
           type="text"
           autoComplete="off"
           placeholder="e.g. 2201-0457"
-          value={campusId}
-          error={errors.campusId}
-          onChange={(e) => {
-            setCampusId(e.target.value)
-            if (errors.campusId) setErrors((prev) => ({ ...prev, campusId: undefined }))
-          }}
+          error={errors.collegeId?.message}
         />
 
         <SelectField
           id="signup-class"
+          name="course"
+          register={register}
           label="Academic course"
           icon="calendarDays"
           placeholder="Select course"
-          options={COURSE_OPTIONS}
-          value={classYear}
-          error={errors.classYear}
-          onChange={(e) => {
-            setClassYear(e.target.value)
-            if (errors.classYear) setErrors((prev) => ({ ...prev, classYear: undefined }))
-          }}
+          options={Object.values(Course)}
+          error={errors.course?.message}
         />
 
         <SelectField
           id="signup-classyear"
           label="Academic year"
+          name="classYear"
+          register={register}
           icon="calendarDays"
           placeholder="Select year"
-          options={YEAR_OPTIONS}
-          value={classYear}
-          error={errors.classYear}
-          onChange={(e) => {
-            setClassYear(e.target.value)
-            if (errors.classYear) setErrors((prev) => ({ ...prev, classYear: undefined }))
-          }}
+          options={Object.values(ClassLYears)}
+          error={errors.classYear?.message}
         />
 
         <TextField
           id="signup-email"
           label="College email"
+          name="email"
+          register={register}
           icon="mail"
           type="email"
           inputMode="email"
           autoComplete="email"
           placeholder="you@college.edu"
-          value={email}
-          error={errors.email}
-          onChange={(e) => {
-            setEmail(e.target.value)
-            if (errors.email) setErrors((prev) => ({ ...prev, email: undefined }))
-          }}
+          error={errors.email?.message}
         />
 
         <PasswordField
           id="signup-password"
           label="Password"
+          name="password"
+          register={register}
           autoComplete="new-password"
           placeholder="Create a password"
-          value={password}
-          error={errors.password}
-          onChange={(e) => {
-            setPassword(e.target.value)
-            if (errors.password) setErrors((prev) => ({ ...prev, password: undefined }))
-          }}
+          error={errors.password?.message}
         />
 
-        <PrimaryButton onClick={handleSubmit} loading={loading}>Create account</PrimaryButton>
+        <PrimaryButton type='submit' onClick={() => { console.log("clicked") }} loading={loading}>Create account</PrimaryButton>
       </form>
     </AuthLayout>
   )

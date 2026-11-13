@@ -10,5 +10,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "devDependencies": {}
+  "dependencies": {
+    "zod": "^4.6.7"
+  }
 }

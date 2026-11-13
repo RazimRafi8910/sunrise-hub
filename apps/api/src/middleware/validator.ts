@@ -3,7 +3,7 @@ import z from 'zod'
 import ApiError from '../lib/apiError.js'
 import { ERROR_CODES } from '@sunrise-hub/shared'
 
-export const RequestbodyValidator = (schema: z.ZodAny) => (req:Request, _res:Response, next:NextFunction) => {
+export const requestbodyValidator = (schema: z.ZodObject) => (req:Request, _res:Response, next:NextFunction) => {
   const result = z.safeParse(schema, req.body);
 
   if (!result.success && result.error) {
@@ -13,8 +13,8 @@ export const RequestbodyValidator = (schema: z.ZodAny) => (req:Request, _res:Res
     }));
 
     console.log("[middleware validator error]", errors);
-    const errorMessage = `Invalid request body: ${errors}`;
-    return next(new ApiError(ERROR_CODES.BAD_REQUEST, errorMessage));
+    const errorMessage = `Invalid request body:`;
+    return next(new ApiError(ERROR_CODES.BAD_REQUEST, errorMessage,errors));
   }
 
   req.body = result.data;

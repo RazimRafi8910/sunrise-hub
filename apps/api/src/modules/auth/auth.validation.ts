@@ -10,9 +10,9 @@ export const signupSchema = z.object({
   email: z.email(),
   fullname: z.string().min(3),
   password: z.string().min(8),
-  college_id_no: z.string(),
+  collegeId: z.string(),
   course: z.string(),
-  class_year:z.string()
+  classYear:z.string()
 })
 
 export type SignupSchema = z.infer<typeof signupSchema>

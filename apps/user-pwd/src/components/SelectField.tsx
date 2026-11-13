@@ -1,4 +1,4 @@
-import type { ComponentPropsWithoutRef } from 'react'
+import { useState, type ComponentPropsWithoutRef } from 'react'
 import { Icon, type IconName } from './Icon'
 
 export type SelectOption = {
@@ -9,25 +9,29 @@ export type SelectOption = {
 export type SelectFieldProps = {
   id: string
   label: string
+  name?: string
   placeholder: string
   options: (SelectOption | string)[]
   icon?: IconName
   error?: string
+  register?: any
 } & ComponentPropsWithoutRef<'select'>
 
 export function SelectField({
   id,
   label,
+  name,
   placeholder,
   options,
   icon,
   error,
   value,
   className = '',
+  register,
   ...rest
 }: SelectFieldProps) {
-  const isPlaceholderSelected = !value || value === ''
-
+  const [isPlaceholderSelected, setIsPlaceholderSelected] = useState(!value || value === '')
+  console.log(value)
   return (
     <div className="flex flex-col gap-[6px]">
       <label htmlFor={id} className="text-[12px] font-semibold text-muted">
@@ -42,17 +46,21 @@ export function SelectField({
         <select
           id={id}
           value={value}
+          defaultValue={""}
+          {...register(name)}
+          onChange={(e) => {
+            setIsPlaceholderSelected(e.target.value === '')
+            register.onChange?.(e)
+          }}
           aria-invalid={Boolean(error)}
           aria-describedby={error ? `${id}-error` : undefined}
-          className={`h-[52px] w-full appearance-none rounded-[16px] border-0 bg-bg text-[15px] transition-colors ${
-            isPlaceholderSelected
-              ? 'font-normal text-muted'
-              : 'font-semibold text-ink'
-          } ${icon ? 'pl-12' : 'pl-4'} pr-10 ${
-            error
+          className={`h-[52px] w-full appearance-none rounded-[16px] border-0 bg-bg text-[15px] transition-colors ${isPlaceholderSelected
+            ? 'font-normal text-muted'
+            : 'font-semibold text-ink'
+            } ${icon ? 'pl-12' : 'pl-4'} pr-10 ${error
               ? 'outline-2 outline-danger outline-offset-2'
               : 'focus:outline-2 focus:outline-ink focus:outline-offset-2'
-          } ${className}`}
+            } ${className}`}
           {...rest}
         >
           <option value="" disabled hidden className="text-muted">

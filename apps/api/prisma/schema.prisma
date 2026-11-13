@@ -23,7 +23,7 @@ model Users {
   role          String    @default("student")
   collegeId     String
   course        String
-  classYear    String
+  classYear     String
   department    String
   isActive      Boolean
   sessions      Session[]

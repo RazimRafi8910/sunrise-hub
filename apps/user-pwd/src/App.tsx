@@ -7,8 +7,6 @@ import {ProtectedRoute} from './components/authComponent/ProtectedRoute'
 import { ProfilePage } from './features/profile/ProfilePage'
 
 function ProtectedLayout() {
-
-
   return (
     <div className="relative mx-auto min-h-dvh max-w-[430px] bg-bg font-sans text-ink">
       <main className="px-5 py-7 pb-[112px]">

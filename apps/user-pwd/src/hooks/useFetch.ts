@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getBackendURL } from '../lib/backendUrl';
+import { getBackendURL } from '../lib/utils';
 
 
 const backendUrl = getBackendURL()

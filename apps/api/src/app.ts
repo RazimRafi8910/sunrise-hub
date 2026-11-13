@@ -17,11 +17,11 @@ app.use(cors({
 
 app.use(morgan('dev'))
 
-app.all('/v1/api/better/*splat', toNodeHandler(auth));
+app.all('/api/v1/auth/*splat', toNodeHandler(auth));
 app.use(express.json());
 
 //routes
-app.use('/v1/api/auth', authRoutes);
+app.use('/api/v1/auth', authRoutes);
 
 //error handlers
 app.all("*splat", handleNotFound);
