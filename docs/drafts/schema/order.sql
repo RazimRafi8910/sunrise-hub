@@ -16,8 +16,11 @@ create table items (
   name          text not null,
   category      text,
   price_paise   bigint not null check (price_paise >= 0),
-  is_available  boolean not null default true,
+  is_listed     boolean not null default true,    -- is listed in any of the meny
+  is_active     boolean not null default true,    -- for deletion
   stock_qty     integer check (stock_qty >= 0),   -- null = not tracked
+  listed_menu_id uuid references day_menu(id),
+  avialable_time text,
   image_key     text
 );
 
@@ -45,3 +48,10 @@ create table order_items (
   unit_price_paise  bigint not null,
   quantity          integer not null check (quantity > 0)
 );
+
+create table day_menu (
+  id                uuid primary key default gen_random_uuid(),
+  day_of_week       int not null unique check(day_of_week between 0 and 6),
+  total_items       int not null
+
+)

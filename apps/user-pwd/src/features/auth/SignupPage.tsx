@@ -80,6 +80,18 @@ export function SignupPage() {
           error={errors.collegeId?.message}
         />
 
+        <TextField
+          id="signup-campusid"
+          label="Reg Id"
+          name="regIdNo"
+          icon="idCard"
+          register={register}
+          type="text"
+          autoComplete="off"
+          placeholder="src/00/0"
+          error={errors.regIdNo?.message}
+        />
+
         <SelectField
           id="signup-class"
           name="course"

@@ -13,25 +13,35 @@ datasource db {
 }
 
 model Users {
-  id            String    @id
-  fullname      String
-  email         String
-  emailVerified Boolean   @default(false)
-  image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  role          String    @default("student")
-  collegeId     String
-  course        String
-  classYear     String
-  department    String
-  isActive      Boolean
-  sessions      Session[]
-  accounts      Account[]
+  id                 String                @id
+  fullname           String
+  email              String
+  emailVerified      Boolean               @default(false)
+  image              String?
+  createdAt          DateTime              @default(now())
+  updatedAt          DateTime              @updatedAt
+  role               String                @default("student")
+  collegeId          String
+  course             String
+  classYear          String
+  department         String
+  isActive           Boolean
+  sessions           Session[]
+  accounts           Account[]
+  admins             Admins?
+  reportFiled        Reports[]             @relation("report_user_fk")
+  reportAgainst      Reports[]             @relation("report_subject_fk")
+  reportReviewed     Reports[]             @relation("report_reviewer_fk")
+  reportNotification ReportNotifications[]
+
+  phoneNo Int?
+
+  regIdNo String?
 
   @@unique([email])
   @@unique([collegeId])
   @@map("users")
+  @@unique([regIdNo])
 }
 
 model Session {
@@ -80,4 +90,182 @@ model Verification {
 
   @@index([identifier])
   @@map("verification")
+}
+
+// admin
+
+enum AdminRole {
+  SUPER_ADMIN @map("super_admin")
+  MODERATOR @map("moderator")
+  STAFF @map("staff")
+
+  @@map("admin_role")
+}
+
+enum AdminScope {
+  CANTEEN @map("canteen")
+  EVENT @map("event")
+  STORE @map("store")
+  REPORT @map("report")
+
+  @@map("admin_scope")
+}
+
+//colleges
+model Colleges {
+  id      String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name    String
+  active  Boolean @default(true)
+  collegeId String @map("college_id")
+
+  @@map("colleges")
+  @@unique([collegeId])
+}
+
+enum AdminPermission {
+  MANAGE @map("manage")
+  VIEWER @map("viewer")
+
+  @@map("admin_permission")
+}
+
+model Admins {
+  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    String    @unique @map("user_id") @db.Text
+  role      AdminRole @default(MODERATOR)
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz
+
+  user        Users        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  permissions Permission[]
+
+  @@map("admins")
+}
+
+model Permission {
+  id         String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  adminId    String          @map("admin_id") @db.Uuid
+  adminScope AdminScope      @map("admin_scope")
+  permission AdminPermission @default(VIEWER)
+  createdAt  DateTime        @default(now()) @map("created_at") @db.Timestamptz
+
+  admin Admins @relation(fields: [adminId], references: [id], onDelete: Cascade)
+
+  @@unique([adminId, adminScope])
+  @@map("permissions")
+}
+
+//report TODO: add check constrain
+
+model Rules {
+  id        String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name      String  @unique
+  is_active Boolean @default(true)
+
+  report Violation[]
+}
+
+model Violation {
+  reportId String @db.Uuid
+  ruleId   String @db.Uuid
+
+  report Reports @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  rule   Rules   @relation(fields: [ruleId], references: [id], onDelete: Restrict)
+
+  @@id([reportId, ruleId])
+  @@map("report_violations")
+}
+
+model Reports {
+  id             String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  reporterId     String    @map("reporter_id")
+  subjectUserId  String    @map("subject_user_id")
+  subjectHint    String?   @map("subject_hint")
+  note           String?
+  observedAt     DateTime  @map("observed_at")
+  location       String?
+  status         String    @default("submitted")
+  aiReviewed     Boolean   @map("ai_reviewed") @default(false)
+  aiReviewNote   String?   @map("ai_review_note")
+  reviewedBy     String?   @map("reviewed_by")
+  reviewedAt     DateTime? @map("reviewed_at")
+  resolutionNote String?   @map("resolution_note")
+  deleteAfter    DateTime? @map("delete_after")
+  createdAt      DateTime  @default(now()) @map("created_at")
+
+  rules       Violation[]
+  images      ReportImages[]
+  reportEvent ReportEvents[]
+  reporter    Users          @relation(name: "report_user_fk", fields: [reporterId], references: [id], onDelete: Restrict)
+  subjectUser Users          @relation(name: "report_subject_fk", fields: [subjectUserId], references: [id], onDelete: Restrict)
+  reviewer    Users?         @relation(name: "report_reviewer_fk", fields: [reviewedBy], references: [id], onDelete: SetNull)
+
+  @@index([reporterId])
+  @@index([subjectUserId])
+  @@index([reviewedBy])
+  @@map("reports")
+}
+
+model ReportImages {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  reportId    String    @db.Uuid @map("report_id")
+  storageKey  String
+  contentType String
+  sizeByte    Int
+  capturedAt  DateTime?
+  createdAt   DateTime  @default(now())
+  deletedAt   DateTime?
+
+  report Reports @relation(fields: [reportId], references: [id], onDelete: Cascade)
+}
+
+model ReportEvents {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  reportId   String   @db.Uuid
+  ReviewerId String   @map("reviewer_id")
+  fromStatus String   @map("from_status")
+  toStatus   String   @map("to_status")
+  note       String?
+  createdAt  DateTime @map("created_at") @default(now())
+
+  report Reports @relation(fields: [reportId], references: [id], onDelete: Cascade)
+
+  @@map("report_events")
+}
+
+model ReportNotifications {
+  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    String    @map("user_id")
+  type      String
+  content   String
+  reportId  String    @map("report_id") @db.Uuid
+  readAt    DateTime? @map("read_at")
+  emailedAt DateTime? @map("emailed_at")
+  createdAT DateTime  @default(now())
+
+  users Users @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+}
+
+//canteen
+
+model FoodItem {
+  id             String   @id
+  name           String   @unique
+  category       String   @default("Food")
+  available_time String?
+  is_listed      Boolean  @default(true)
+  is_active      Boolean  @default(true)
+  price_paise    BigInt
+  stock_qty      Int
+  image_key      String?
+  createdAt      DateTime @default(now())
+  updateAt       DateTime @updatedAt
+
+  @@map("food_item")
+}
+
+model Menu {
+  id        String   @id
+  menu_date DateTime
+
 }

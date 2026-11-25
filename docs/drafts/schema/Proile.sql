@@ -4,6 +4,7 @@ create table profiles (
   college_id_no  text not null unique,      -- admission or staff number
   email          text not null unique,
   password_hash  text not null,
+  role           text not null default "student",
   course         text not null,
   class_year     text not null,
   department     text not null in ('BCA','BBA','BCOM'),

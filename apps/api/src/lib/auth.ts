@@ -49,18 +49,26 @@ const auth = betterAuth({
     additionalFields: {
       role: {
         type: ["student", "faculty", "staff", "admin"],
-        required: false,
+        required: true,
         defaultValue: "student",
         input: false,
+      },
+      phoneNo: {
+        type: "number",
+        required: false,
+      },
+      regIdNo: {
+        type: "string",
+        required: true,
+        unique:true
       },
       collegeId: {
         type: "string",
         required: true,
-        unique: true,
-
+        unique: false,
       },
       course: {
-        type: ["BCA", "BBA", "BCOM"],
+        type: ["BCA", "BBA", "BCOM","other"],
         required: true,
       },
       classYear: {
@@ -68,7 +76,7 @@ const auth = betterAuth({
         required: true,
       },
       department: {
-        type: ["computer_application", "business_management"],
+        type: ["computer_application", "business_management","staff"],
         required: true,
         input:true,
       },

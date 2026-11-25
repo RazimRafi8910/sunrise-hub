@@ -1,29 +1,37 @@
 @import "tailwindcss";
 
 @theme {
-  --color-bg: #f4f5f7;
+  --color-bg: #fff7ea;
   --color-surface: #ffffff;
-  --color-ink: #14161a;
-  --color-muted: #5b6068;
+  --color-ink: #1b2142;
+  --color-muted: #5e637a;
   --color-amber: #ffb020;
-  --color-amber-tint: #ffe9bf;
+  --color-amber-tint: #fde4b8;
+  --color-amber-soft: #ffe3a8;
   --color-amber-ink: #3a2a00;
-  --color-grey-tint: #e9ebef;
-  --color-grey-ink: #3f434a;
-  --color-green-bg: #ddf3e4;
-  --color-green-ink: #14582b;
-  --color-divider: #ecedf0;
-  --color-alert-dot: #ff7a1a;
-  --color-danger: #b3261e;
+  --color-rust: #9a3412;
+  --color-grey-tint: #f5efe6;
+  --color-grey-ink: #4a4f66;
+  --color-green-bg: #dcfce7;
+  --color-green-ink: #166534;
+  --color-divider: rgba(27, 33, 66, 0.08);
+  --color-alert-dot: #f47b2a;
+  --color-danger: #991b1b;
 
-  --radius-card: 24px;
+  --radius-card: 22px;
   --radius-tile: 20px;
   --radius-icon-lg: 14px;
   --radius-icon-sm: 12px;
   --radius-pill: 9999px;
   --radius-button: 26px;
 
-  --font-sans: "Manrope", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Plus Jakarta Sans", "Manrope", ui-sans-serif, system-ui, sans-serif;
+  --font-report: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+
+  --color-navy: #1b2142;
+  --color-cream: #fff7ea;
+  --color-sun-orange: #f47b2a;
+  --shadow-report-card: 0 4px 16px rgba(27, 33, 66, 0.08);
 }
 
 @layer base {

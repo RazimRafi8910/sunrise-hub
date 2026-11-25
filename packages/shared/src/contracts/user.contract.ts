@@ -10,11 +10,13 @@ export interface User {
   emailVerified: string;
   createdAt: string;
   collegeId: string;
+  regIdNo?: string;
   isActive: boolean;
   role: UserRolesEnum;
   department: DepartmentsEnum;
   classYear: string;
   course: CourseEnum;
+  phoneNo?:number
 }
 
 

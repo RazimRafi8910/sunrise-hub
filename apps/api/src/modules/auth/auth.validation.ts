@@ -2,8 +2,9 @@ import z from 'zod'
 
 
 export const loginSchema = z.object({
-    email: z.email(),
-    password: z.string().min(8, "Minimun 8 chartecter should be"),
+  email: z.email(),
+  password: z.string().min(8, "Minimun 8 chartecter should be"),
+  adminPortal: z.string().optional()
 });
 
 export const signupSchema = z.object({

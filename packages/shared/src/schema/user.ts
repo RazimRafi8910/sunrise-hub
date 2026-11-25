@@ -15,4 +15,5 @@ export interface User {
   department: ["CA", "BM"]
   classYear: string,
   course: Course,
+  phoneNo?:number,
 }

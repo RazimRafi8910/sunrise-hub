@@ -6,6 +6,8 @@ import authRoutes from "./modules/auth/auth.routes.js";
 import { handleNotFound, handleError } from './middleware/errorHandler.js';
 import { toNodeHandler } from 'better-auth/node';
 import auth from './lib/auth.js';
+import canteenRoutes from './modules/canteen/canteen.routes.js';
+import reportRouter from './modules/report/report.routes.js';
 
 const app = express();
 
@@ -22,6 +24,8 @@ app.use(express.json());
 
 //routes
 app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/canteen', canteenRoutes);
+app.use('/api/v1/report',reportRouter)
 
 //error handlers
 app.all("*splat", handleNotFound);

@@ -12,7 +12,7 @@ create table reports (
   subject_hint     text,                          -- what the reporter knows
   note             text,
   status           text not null default 'submitted'
-                   check (status in ('submitted','under_review','verified','rejected','action_taken')),
+                   check (status in ('submitted','under_review','verified','rejected','action_taken','closed')),
   reviewed_by      text references "user"(id),
   reviewed_at      timestamptz,
   resolution_note  text,

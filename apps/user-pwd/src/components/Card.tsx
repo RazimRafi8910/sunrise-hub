@@ -8,6 +8,10 @@ export function Card({
   className?: string
 }) {
   return (
-    <div className={`rounded-card bg-surface ${className ?? ''}`}>{children}</div>
+    <div
+      className={`rounded-card bg-surface shadow-[0_4px_16px_rgba(27,33,66,0.08)] ${className ?? ''}`}
+    >
+      {children}
+    </div>
   )
 }

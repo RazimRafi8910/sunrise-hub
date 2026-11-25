@@ -21,15 +21,20 @@ export function LoginPage() {
   async function onSubmit(data:{email:string,password:string}) {
     setLoading(true)
     try {
-      const result = await authClient.signIn.email({ email: data.email, password: data.password });
-      if (result.error) {
-        setError(getAuthErrorCodeMsg(result.error.code));
-        return
-      }
-      console.log(result.data)
-      if (result.data.user) {
-        navigate('/', { replace: true });
-      }
+      const result = await authClient.signIn.email(
+        { email: data.email, password: data.password },
+        {
+          onSuccess: () => navigate('/', { replace: true }),
+          onError: (ctx) => setError(getAuthErrorCodeMsg(ctx.error.code))
+        });
+      // if (result.error) {
+      //   setError(getAuthErrorCodeMsg(result.error.code));
+      //   return
+      // }
+      // console.log(result.data)
+      // if (result.data.token) {
+      //   navigate('/', { replace: true });
+      // }
     } catch (error) {
       console.log(error)
       setError("Something went wrong");
