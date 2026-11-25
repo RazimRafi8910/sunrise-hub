@@ -7,6 +7,8 @@ import { StatsRow } from './StatsRow'
 import type { AgainstMeReport, Report, ReportStats, User } from './types'
 import { UserCard } from './UserCard'
 import { VerifiedAlert } from './VerifiedAlert'
+import { useAuthUser } from '../../hooks/useAuth'
+import RulesCard from './RulesCard'
 
 export interface ReportsHomePageProps {
   user?: User
@@ -116,7 +118,6 @@ function ErrorRetryCard({
 }
 
 export function ReportsHomePage({
-  user = DEFAULT_USER,
   reports = DEFAULT_REPORTS,
   stats = DEFAULT_STATS,
   againstMeReports = DEFAULT_AGAINST_ME_REPORTS,
@@ -126,16 +127,16 @@ export function ReportsHomePage({
   onRetry,
 }: ReportsHomePageProps) {
   const recentReports = reports.slice(0, 3)
-
+  const { user } = useAuthUser()
   return (
     <div
       className="min-h-dvh w-full bg-[#FFF7EA] text-[#1B2142] md:flex"
       style={{ fontFamily: 'var(--font-report)' }}
     >
-      <BottomNav />
+      {/* <BottomNav /> */}
 
       <div className="min-w-0 flex-1">
-        <HomeHeader firstName={user.firstName} unreadCount={unreadCount} />
+        <HomeHeader firstName={user.fullname} unreadCount={unreadCount} />
 
         <main className="relative flex flex-col gap-4 px-4 pb-[112px] md:gap-6 md:px-8 md:pb-10 lg:px-10">
           {error ? (
@@ -154,7 +155,7 @@ export function ReportsHomePage({
                   />
                 </div>
                 <div className="lg:col-span-5">
-                  <ReportCta className="lg:h-full" />
+                  <ReportCta userRole={user.role} className="lg:h-full" />
                 </div>
               </div>
 
@@ -163,6 +164,7 @@ export function ReportsHomePage({
                   <StatsRow stats={stats} loading={isLoading} />
 
                   {!isLoading ? <VerifiedAlert reports={againstMeReports} /> : null}
+                  {!isLoading ? <RulesCard userRole={user.role} /> : null}
                 </div>
 
                 <section

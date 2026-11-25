@@ -1,6 +1,2 @@
 
-
-
-export const department = {
-
-}
+export const ReportImageBucket = 'reports'

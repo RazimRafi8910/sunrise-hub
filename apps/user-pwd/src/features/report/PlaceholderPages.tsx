@@ -6,7 +6,7 @@ function PlaceholderShell({
   title,
   subtitle,
   children,
-  showBottomNav = true,
+  showBottomNav = false,
 }: {
   title: string
   subtitle: string
@@ -78,21 +78,6 @@ export function MyReportsPage() {
           GET /reports/me
         </code>
         .
-      </p>
-    </PlaceholderShell>
-  )
-}
-
-export function NewReportPage() {
-  return (
-    <PlaceholderShell
-      title="Report a violation"
-      subtitle="Capture a photo or choose from gallery"
-      showBottomNav={false}
-    >
-      <p className="text-[14px] leading-relaxed text-[#1B2142]/75">
-        Violation submission form placeholder. Camera capture, rule picker, and
-        location fields will go here.
       </p>
     </PlaceholderShell>
   )

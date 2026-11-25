@@ -16,7 +16,7 @@ export function ProtectedRoute() {
   return (
     <div className="relative min-h-dvh bg-bg font-sans text-ink md:flex">
       <BottomNav />
-      <main className="min-w-0 flex-1 px-5 py-7 pb-[112px] md:px-8 md:py-8 md:pb-10 lg:px-10">
+      <main className="min-w-0 flex-1 pb-[112px] md: md: md:pb-10 lg:">
         <Outlet />
       </main>
     </div>

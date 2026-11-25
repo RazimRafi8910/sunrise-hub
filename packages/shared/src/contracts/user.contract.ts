@@ -16,7 +16,7 @@ export interface User {
   department: DepartmentsEnum;
   classYear: string;
   course: CourseEnum;
-  phoneNo?:number
+  phoneNo?: number
 }
 
 
@@ -30,5 +30,5 @@ export interface SessionInfo {
 
 export interface Session {
   session: Session,
-  user:User
+  user: User
 }

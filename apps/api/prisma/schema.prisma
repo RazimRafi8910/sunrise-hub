@@ -159,6 +159,7 @@ model Permission {
 model Rules {
   id        String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   name      String  @unique
+  description String
   is_active Boolean @default(true)
 
   report Violation[]

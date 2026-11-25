@@ -2,6 +2,8 @@ import { GetObjectCommand, HeadObjectCommand, PutObjectCommand, S3Client, type G
 import env from '../config/env.js';
 import crypto from 'node:crypto'
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import type { ErrorCode } from '@sunrise-hub/shared';
+import type { keyof } from 'zod';
 
 
 const ALLOWED_FILE_TYPE = new Set([
@@ -23,11 +25,20 @@ const storageClient = new S3Client({
   },
 });
 
+const StorageErrorCode = {
+  INVALID_VALUES: 'INVALID_VALUES',
+  FAILED_CREATE: 'FAILED_CREATE',
+  INVALID_FILE_TYPE:'INVALID_FILE_TYPE'
+} as const
+
+export type StorageErrorCodeType = keyof typeof StorageErrorCode
+
 type GetStoragePutUrlType= {
   status: boolean,
   message: string,
   objectUrl?: string | null
-  imageKey?:string | null
+  imageKey?: string | null
+  code?:StorageErrorCodeType
 }
 
 type GetObjectMetaType= {
@@ -52,6 +63,7 @@ export const getStoragePutUrl = async (filename: string, contentType: string, bu
   if (!filename || !contentType) {
     return {
       status: false,
+      code:StorageErrorCode.INVALID_VALUES,
       message:`${!filename ? "Filename is missing" : "content type is missing" }`,
     }
   }
@@ -59,6 +71,7 @@ export const getStoragePutUrl = async (filename: string, contentType: string, bu
   if (!ALLOWED_FILE_TYPE.has(contentType)) {
     return {
       status: false,
+      code:StorageErrorCode.INVALID_FILE_TYPE,
       message:"file type not supported",
     }
   }
@@ -85,6 +98,7 @@ export const getStoragePutUrl = async (filename: string, contentType: string, bu
     console.log(e)
     return {
       status: false,
+      code:StorageErrorCode.FAILED_CREATE,
       message: "url not created",
       objectUrl:null
     }

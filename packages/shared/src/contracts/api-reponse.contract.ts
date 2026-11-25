@@ -7,7 +7,7 @@ export interface ApiSuccess<T> {
   code?:string,
 }
 
-export interface ApiError {
+export interface ApiErrorType {
   success: false,
   error: {
     code: string,
@@ -17,4 +17,4 @@ export interface ApiError {
 }
 
 
-export type ApiResponse<T> = ApiSuccess<T> | ApiError;
+export type ApiResponse<T> = ApiSuccess<T> | ApiErrorType;

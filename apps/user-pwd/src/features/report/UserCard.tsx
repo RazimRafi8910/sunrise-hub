@@ -1,4 +1,5 @@
-import type { Role, User } from './types'
+import type { Role } from './types'
+import type { User } from '@sunrise-hub/shared'
 
 export interface UserCardProps {
   user?: User
@@ -15,6 +16,7 @@ const ROLE_STYLES: Record<Role, string> = {
 }
 
 export function UserCard({ user, loading = false, className = '' }: UserCardProps) {
+  console.log(user)
   if (loading || !user) {
     return (
       <div
@@ -41,15 +43,18 @@ export function UserCard({ user, loading = false, className = '' }: UserCardProp
         aria-hidden="true"
         className="flex size-[52px] shrink-0 items-center justify-center rounded-full bg-[#FDE4B8] text-[17px] font-extrabold tracking-[-0.01em] text-[#1B2142]"
       >
-        {user.initials}
+        {user.name[0].toLocaleUpperCase()}
       </div>
 
       <div className="min-w-0 flex-1">
         <p className="truncate text-[17px] font-extrabold leading-snug text-[#1B2142]">
-          {user.fullName}
+          {user.name.toLocaleUpperCase()}
+        </p>
+        <p className="truncate text-[10px] m-0 p-0 font-extrabold leading-snug text-slate-600">
+          {user.regIdNo}
         </p>
         <p className="mt-0.5 text-[13px] font-normal leading-snug text-[#1B2142]/65">
-          {user.course} · {user.year}
+          {user.course} · {user.classYear} · {user.department}
         </p>
       </div>
 

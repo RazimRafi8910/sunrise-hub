@@ -13,13 +13,13 @@ function greetingLabel(hour: number) {
 
 export function HomePage() {
   const greeting = greetingLabel(new Date().getHours())
-  const { user,session } = useAuthUser();
+  const { user, session } = useAuthUser();
   useEffect(() => {
     console.log("HomePage mounted");
     return () => console.log("HomePage unmounted");
   }, []);
   return (
-    <div className="flex w-full flex-col gap-5 md:gap-6">
+    <div className="flex w-full flex-col gap-5 p-5 md:gap-6 md:px-10 md:py-8">
       <header className="relative -mx-5 -mt-7 overflow-hidden rounded-b-[28px] bg-[#1B2142] px-5 pt-[max(20px,env(safe-area-inset-top))] pb-[88px] text-white md:-mx-8 md:-mt-8 md:rounded-b-[32px] md:px-8 md:pt-7 md:pb-[92px] lg:-mx-10 lg:px-10">
         {/* Decorative peeking half-sun in the bottom-right corner */}
         <svg
@@ -64,7 +64,7 @@ export function HomePage() {
             type="button"
             aria-label="Notifications"
             className="relative flex size-11 shrink-0 items-center justify-center rounded-full border-0 bg-white/12 text-white motion-safe:transition-transform motion-safe:active:scale-[0.98]"
-            onClick={() => {}}
+            onClick={() => { }}
           >
             <Icon name="bell" size={20} />
             <span className="absolute top-[10px] right-[11px] size-[9px] rounded-full border-2 border-[#1B2142] bg-[#FFB020]" />
@@ -82,7 +82,7 @@ export function HomePage() {
       </header>
 
       <div className="relative z-10 -mt-[76px] md:-mt-[80px]">
-        <CampusCard user={{name:user.name,collegeId:user.collegeId,role:user.role}} />
+        <CampusCard user={{ name: user.name, collegeId: user.collegeId, role: user.role }} />
       </div>
 
       <div className="grid grid-cols-1 gap-[22px] lg:grid-cols-12 lg:items-start lg:gap-6">

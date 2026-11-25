@@ -8,8 +8,8 @@ import authClient, { getAuthErrorCodeMsg } from '../../lib/auth-client'
 import { useNavigate } from 'react-router'
 
 const DeptName = {
-  computer_science:"Computer Science",
-  business_management:"Business Management",
+  computer_science: "Computer Science",
+  business_management: "Business Management",
 }
 
 export function ProfilePage() {
@@ -30,7 +30,7 @@ export function ProfilePage() {
       }
 
       if (data.success) {
-        naviate('/login', { replace:true});
+        naviate('/login', { replace: true });
       }
     } catch (error) {
       console.log(error)
@@ -39,7 +39,7 @@ export function ProfilePage() {
     }
   }
   return (
-    <div className="flex w-full flex-col gap-4 md:gap-6">
+    <div className="flex w-full flex-col gap-4 md:gap-6 p-4 md:px-10 md:py-8">
       <div className="flex flex-col items-center gap-2.5 md:flex-row md:items-center md:gap-5 md:rounded-card md:bg-surface md:p-6">
         <div className="relative size-[104px] shrink-0">
           <div className="flex size-[104px] items-center justify-center rounded-full border-[5px] border-surface bg-amber text-[12px] font-extrabold tracking-[-0.02em] md:border-bg">
@@ -49,7 +49,7 @@ export function ProfilePage() {
             type="button"
             aria-label="Change photo"
             className="absolute right-[-14px] bottom-[-6px] flex size-[44px] items-center justify-center rounded-full border-0 bg-surface text-ink md:right-[-6px] md:bottom-[-4px] md:bg-bg"
-            onClick={() => {}}
+            onClick={() => { }}
           >
             <Icon name="pencil" size={20} />
           </button>
@@ -67,7 +67,7 @@ export function ProfilePage() {
             <button
               type="button"
               className="min-h-11 border-0 bg-transparent px-1 text-[13px] font-extrabold text-ink"
-              onClick={() => {}}
+              onClick={() => { }}
             >
               Edit
             </button>
@@ -103,11 +103,11 @@ export function ProfilePage() {
       <div className="flex md:justify-end">
         <button
           type="button"
-          className={`flex h-[52px] w-full items-center justify-center gap-2 rounded-button border-0 bg-surface px-8 text-[15px] font-extrabold md:w-auto ${loading ?"text-red-400":"text-danger"}`}
+          className={`flex h-[52px] w-full items-center justify-center gap-2 rounded-button border-0 bg-surface px-8 text-[15px] font-extrabold md:w-auto ${loading ? "text-red-400" : "text-danger"}`}
           onClick={logOut}
         >
           <Icon name="logOut" size={20} strokeWidth={1.9} />
-          {loading ? "Signing Out....":"Sign out"}
+          {loading ? "Signing Out...." : "Sign out"}
         </button>
       </div>
     </div>

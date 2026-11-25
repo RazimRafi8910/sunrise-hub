@@ -6,13 +6,13 @@ import { ProtectedRoute } from './components/authComponent/ProtectedRoute'
 import { ProfilePage } from './features/profile/ProfilePage'
 import AuthProtectRoute from './components/authComponent/AuthRoute'
 import { ReportsHomePage } from './features/report/ReportsHomePage'
+import { NewReportPage } from './features/report/NewReportPage'
+import { RulesPage } from './features/report/RulesPage'
 import {
   AgainstMeReportsPage,
   MyReportsPage,
-  NewReportPage,
   NotificationsPage,
   ReportDetailPage,
-  RulesPage,
 } from './features/report/PlaceholderPages'
 
 function PublicLayout() {
@@ -25,13 +25,6 @@ export default function App() {
       <Routes>
         {/* Public / standalone routes */}
         <Route element={<PublicLayout />}>
-          <Route path="/report" element={<ReportsHomePage />} />
-          <Route path="/reports" element={<MyReportsPage />} />
-          <Route path="/reports/new" element={<NewReportPage />} />
-          <Route path="/reports/against-me" element={<AgainstMeReportsPage />} />
-          <Route path="/reports/:id" element={<ReportDetailPage />} />
-          <Route path="/rules" element={<RulesPage />} />
-          <Route path="/notifications" element={<NotificationsPage />} />
         </Route>
 
         {/* Auth routes - No bottom nav */}
@@ -44,6 +37,16 @@ export default function App() {
         <Route element={<ProtectedRoute />}>
           <Route path="/" element={<HomePage />} />
           <Route path="/profile" element={<ProfilePage />} />
+        </Route>
+
+        <Route element={<ProtectedRoute />}>
+          <Route path="/report" element={<ReportsHomePage />} />
+          <Route path="/reports" element={<MyReportsPage />} />
+          <Route path="/reports/new" element={<NewReportPage />} />
+          <Route path="/reports/against-me" element={<AgainstMeReportsPage />} />
+          <Route path="/reports/:id" element={<ReportDetailPage />} />
+          <Route path="/rules" element={<RulesPage />} />
+          <Route path="/notifications" element={<NotificationsPage />} />
         </Route>
 
         {/* Fallback */}
